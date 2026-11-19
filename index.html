@@ -1,348 +1,579 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f3d6c8">
-  <title>The Great Rice Thanksgiving 2026</title>
-  <meta name="description" content="Five days, one family, an unreasonable amount of food. Welcome to The Great Rice Thanksgiving.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f1e7">
+<title>The Great Rice Thanksgiving</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@90..112,400..800&display=swap" rel="stylesheet">
+<style>
+/* Swiss/Bauhaus: one grotesque, a strict column grid, flat colour fields, geometric shapes, plain text links. Mobile first. */
+:root{
+  --paper:#f6f1e7; --white:#fffdf8; --ink:#1e2522; --coral:#f05b45; --butter:#f1d75b;
+  --blue:#4b5cc8; --lavender:#7771d8; --green:#244b3d; --rule:rgba(30,37,34,.9);
+  --gutter:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:16px; line-height:1.45;
+  padding-left:max(var(--gutter),env(safe-area-inset-left,0px));
+  padding-right:max(var(--gutter),env(safe-area-inset-right,0px));
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border-radius:0;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto}
+.hidden{display:none!important}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+.label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin:0 0 14px}
+.h-xl{font-size:clamp(50px,13vw,150px);font-weight:800;line-height:.9;letter-spacing:-.04em;margin:0}
+.h-l{font-size:clamp(38px,9vw,88px);font-weight:800;line-height:.95;letter-spacing:-.035em;margin:0}
+.h-m{font-size:clamp(24px,4.5vw,32px);font-weight:700;line-height:1.1;letter-spacing:-.015em;margin:0}
+.lede{font-size:clamp(18px,4.4vw,22px);line-height:1.38;font-weight:500;max-width:34ch;margin:0}
+.textlink{font-weight:600;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px;background:none;border:0;padding:4px 0;font-size:16px}
+.textlink:hover{color:var(--blue)}
 
-  <style>
-    :root {
-      --peach: #f3d6c8;
-      --cream: #f8f5ef;
-      --clay: #bd654d;
-      --coral: #ef7359;
-      --ink: #302c29;
-      --smoke: #dedbd5;
-      --yellow: #e8c96d;
-      --green: #667c60;
-    }
+/* Top bar */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 0;border-bottom:2px solid var(--rule);flex-wrap:wrap;margin-top:max(12px,env(safe-area-inset-top,0px))}
+.bar .name{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.bar nav{display:flex;gap:18px}
+.bar nav a{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;text-decoration:none;padding:8px 0}
+.bar nav a:hover{text-decoration:underline;text-underline-offset:4px}
 
-    * { box-sizing: border-box; }
+/* Hero: the game */
+.hero{position:relative;padding:44px 0 56px;overflow:hidden}
+.hero .h-xl{position:relative;z-index:1;max-width:11ch}
+.hero .lede{position:relative;z-index:1;margin-top:22px}
+.hero .cta-row{position:relative;z-index:1;margin-top:28px;display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.shapes{position:absolute;inset:0;pointer-events:none}
+.shapes i{position:absolute;display:block}
+.shapes .sq{width:118px;height:118px;background:var(--coral);top:6px;right:-10px}
+.shapes .ci{width:86px;height:86px;border-radius:50%;background:var(--blue);top:118px;right:110px}
+.shapes .tr{width:0;height:0;border-left:58px solid transparent;border-right:58px solid transparent;border-bottom:100px solid var(--butter);top:200px;right:6px}
 
-    html { scroll-behavior: smooth; }
+.cta{background:var(--ink);color:var(--paper);border:0;padding:17px 26px;font-weight:700;font-size:16px;letter-spacing:.01em;min-height:54px;transition:background .15s}
+.cta:hover{background:var(--blue)}
+.cta.coral{background:var(--coral);color:var(--ink)}
+.cta.coral:hover{background:var(--ink);color:var(--paper)}
 
-    body {
-      margin: 0;
-      background: var(--cream);
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-    }
+/* Quiz */
+.quiz{background:var(--white);margin:0 calc(var(--gutter) * -1);padding:36px var(--gutter) 40px;border-top:2px solid var(--rule);border-bottom:2px solid var(--rule)}
+.quiz-inner{max-width:720px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 26px}
+.steps span{height:6px;background:rgba(30,37,34,.14)}
+.steps span.on{background:var(--coral)}
+.qtitle{margin:0 0 22px}
+.choices{border-bottom:2px solid var(--ink)}
+.choice{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:2px solid var(--ink);padding:16px 0;font-size:18px;font-weight:500;line-height:1.3}
+.choice .n{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:13px;font-weight:800}
+.choice[aria-pressed="true"]{font-weight:700}
+.choice[aria-pressed="true"] .n{background:var(--ink);color:var(--paper)}
+.qactions{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:24px;flex-wrap:wrap}
+.qmsg{font-size:14px;font-weight:700;color:var(--coral);margin:0}
+.result{display:grid;gap:18px}
+.result .h-l{font-size:clamp(44px,11vw,104px)}
+.assign{display:grid;gap:8px;border-top:2px solid var(--ink);padding-top:16px}
+.assign p{margin:0}
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 6%;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
+/* Feast */
+.feast{padding:64px 0 24px}
+.feast-head{display:grid;gap:18px;margin-bottom:34px}
+.feast-grid{display:grid;gap:44px;grid-template-columns:1fr}
+.form{display:grid;gap:22px;align-content:start}
+.field{display:grid;gap:6px}
+.field > label, .field > .label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+input[type=text],input:not([type]),textarea{width:100%;min-width:0;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:10px 0;font-size:18px;border-radius:0;color:var(--ink)}
+input::placeholder,textarea::placeholder{color:rgba(30,37,34,.5)}
+textarea{min-height:76px;resize:vertical}
+.hint{font-size:13px;margin:0;opacity:.8}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);background:transparent;padding:9px 13px;font-size:14px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.err{font-size:14px;font-weight:700;color:var(--coral);margin:0}
+.notice{font-size:14px;font-weight:600;margin:0 0 18px;padding:12px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
 
-    .topbar-mark { display: flex; align-items: center; gap: 9px; }
-    .topbar-mark span { color: var(--clay); font-size: 20px; }
+.list-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+.filters{display:flex;gap:18px}
+.filters button{background:none;border:0;padding:6px 0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(30,37,34,.55)}
+.filters button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+.count{font-size:14px;font-weight:600;margin:0 0 16px}
+.list{display:grid;gap:14px;grid-template-columns:1fr}
+.dish{background:var(--white);padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.dish.open{background:var(--butter)}
+.dish .cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em}
+.dish h3{margin:0;font-size:24px;font-weight:800;line-height:1.05;letter-spacing:-.02em;overflow-wrap:anywhere}
+.dish p{margin:0;font-size:15px}
+.status{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700}
+.mark{width:14px;height:14px;flex:none}
+.mark.open{border-radius:50%;background:var(--coral)}
+.mark.claimed{background:var(--blue)}
+.actions{display:flex;flex-wrap:wrap;gap:6px 18px;padding-top:4px}
+.actions button{background:none;border:0;padding:6px 0;font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px}
+.actions button.lead{text-decoration:none;background:var(--ink);color:var(--paper);padding:10px 14px}
+.actions button.lead:hover{background:var(--blue)}
+.actions button.bad{color:var(--coral)}
+.inline{display:grid;gap:12px;border-top:2px solid var(--ink);padding-top:14px}
+.inline .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.inline input{border-bottom-width:2px}
+.empty{padding:28px 0;font-size:18px;font-weight:500;border-top:2px solid var(--ink)}
 
-    .edition {
-      border: 1px solid var(--ink);
-      padding: 8px 12px;
-      border-radius: 2px;
-    }
+.house{margin-top:48px;display:grid;gap:10px;padding-top:20px;border-top:2px solid var(--ink)}
+.house p{margin:0;max-width:52ch}
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      margin: 0 3%;
-      min-height: 690px;
-      background: var(--peach);
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      align-items: center;
-      padding: 65px 7%;
-    }
+/* Footer: plain links, like the Talea footer */
+.foot{margin-top:64px;border-top:2px solid var(--rule);padding:22px 0 36px;display:grid;gap:18px}
+.foot nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.foot nav a{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.foot p{margin:0;font-size:13px;opacity:.8}
 
-    .hero-copy { position: relative; z-index: 2; }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-bottom: 25px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 27px;
-      height: 2px;
-      background: var(--clay);
-    }
-
-    h1 {
-      margin: 0;
-      font-family: "Archivo Black", sans-serif;
-      font-size: clamp(65px, 9.2vw, 132px);
-      line-height: .88;
-      letter-spacing: -.075em;
-      text-transform: uppercase;
-      max-width: 720px;
-    }
-
-    h1 .accent {
-      display: block;
-      color: var(--clay);
-    }
-
-    .hero-subtitle {
-      margin: 28px 0 0;
-      max-width: 390px;
-      font-size: 17px;
-      line-height: 1.6;
-    }
-
-    .hero-subtitle em {
-      font-family: "Playfair Display", serif;
-      font-size: 20px;
-    }
-
-    .hero-art {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      justify-self: center;
-    }
-
-    .hero-art svg { width: 100%; height: auto; overflow: visible; }
-
-    .art-note {
-      position: absolute;
-      right: 0;
-      bottom: 5%;
-      transform: rotate(-8deg);
-      background: var(--yellow);
-      padding: 13px 18px;
-      font-family: "Playfair Display", serif;
-      font-style: italic;
-      font-size: 17px;
-      box-shadow: 3px 4px 0 rgba(48,44,41,.12);
-    }
-
-    .intro {
-      padding: 85px 8% 95px;
-      text-align: center;
-    }
-
-    .intro h2 {
-      max-width: 750px;
-      margin: 0 auto 20px;
-      font-family: "Archivo Black", sans-serif;
-      font-size: clamp(34px, 5vw, 62px);
-      line-height: 1.02;
-      letter-spacing: -.055em;
-      text-transform: uppercase;
-    }
-
-    .intro h2 span { color: var(--clay); }
-
-    .intro p {
-      max-width: 510px;
-      margin: 0 auto;
-      font-size: 16px;
-      line-height: 1.75;
-      color: #625b55;
-    }
-
-    .details {
-      background: var(--ink);
-      color: var(--cream);
-      padding: 65px 8%;
-    }
-
-    .details-grid {
-      max-width: 1050px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 35px;
-    }
-
-    .detail { border-top: 1px solid #77716b; padding-top: 18px; }
-
-    .detail-label {
-      color: var(--peach);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    .detail-value {
-      margin-top: 12px;
-      font-family: "Archivo Black", sans-serif;
-      font-size: 25px;
-      line-height: 1.15;
-      letter-spacing: -.04em;
-    }
-
-    .next {
-      padding: 90px 8%;
-      text-align: center;
-    }
-
-    .next .eyebrow { justify-content: center; }
-
-    .next h2 {
-      margin: 0 auto 18px;
-      max-width: 650px;
-      font-family: "Archivo Black", sans-serif;
-      font-size: clamp(38px, 6vw, 70px);
-      line-height: .98;
-      letter-spacing: -.06em;
-      text-transform: uppercase;
-    }
-
-    .next p {
-      max-width: 450px;
-      margin: auto;
-      color: #625b55;
-      line-height: 1.7;
-    }
-
-    .footer {
-      background: var(--peach);
-      padding: 25px 6%;
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 760px) {
-      .topbar { padding: 18px 5%; }
-      .hero {
-        margin: 0 3%;
-        padding: 55px 7% 35px;
-        grid-template-columns: 1fr;
-        min-height: auto;
-      }
-      h1 { font-size: clamp(65px, 16vw, 105px); }
-      .hero-art { max-width: 330px; margin-top: 20px; }
-      .art-note { right: -4px; bottom: 0; }
-      .intro { padding: 65px 8%; }
-      .details-grid { grid-template-columns: 1fr; gap: 28px; }
-      .detail-value { font-size: 23px; }
-      .next { padding: 70px 8%; }
-    }
-  </style>
+@media (min-width:760px){
+  .shapes .sq{width:190px;height:190px;top:20px;right:40px}
+  .shapes .ci{width:140px;height:140px;top:210px;right:250px}
+  .shapes .tr{border-left-width:95px;border-right-width:95px;border-bottom-width:160px;top:280px;right:70px}
+  .steps{gap:8px}
+  .choice{font-size:20px}
+  .feast-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:start}
+  .list{grid-template-columns:1fr 1fr}
+  .foot{grid-template-columns:1fr auto;align-items:end}
+}
+@media (min-width:1040px){
+  .list{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:360px){
+  .bar nav{gap:12px}
+  .shapes{display:none}
+}
+</style>
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="topbar-mark"><span>✳</span> The Rice Family Gathering</div>
-    <div class="edition">Est. 2026 · Family Edition</div>
+<div class="wrap">
+
+  <header class="bar">
+    <span class="name">The Great Rice Thanksgiving</span>
+    <nav aria-label="Main">
+      <a href="#game">The game</a>
+      <a href="#feast">The feast</a>
+    </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="eyebrow">An invitation to the table</div>
-        <h1>
-          The Great
-          <span class="accent">Rice</span>
-          Thanksgiving
-        </h1>
-        <p class="hero-subtitle">
-          Five days. One family. An unreasonable amount of food.
-          <em>Let the festivities begin.</em>
-        </p>
-      </div>
+  <!-- The game -->
+  <section id="game" class="hero" aria-labelledby="heroTitle">
+    <div class="shapes" aria-hidden="true"><i class="sq"></i><i class="ci"></i><i class="tr"></i></div>
+    <p class="label">Nov 24–28, 2026 · Family gathering</p>
+    <h1 class="h-xl" id="heroTitle">Find out what kind of guest you are.</h1>
+    <p class="lede">Five questions. Zero wrong answers. Several passive-aggressive ones. Then you bring something edible to the feast, which is the actual assignment.</p>
+    <div class="cta-row">
+      <button type="button" class="cta" id="startQuiz">Start the quiz</button>
+      <a href="#feast" class="textlink">Skip to the feast →</a>
+    </div>
+  </section>
 
-      <div class="hero-art">
-        <svg viewBox="0 0 460 470" role="img" aria-label="Whimsical illustrated Thanksgiving feast">
-          <ellipse cx="230" cy="405" rx="175" ry="24" fill="#bd654d" opacity=".17"/>
-          <path d="M75 250 C50 155 135 90 230 105 C330 87 407 165 382 258 C365 345 300 375 230 375 C145 375 93 335 75 250Z" fill="#f8f5ef" stroke="#302c29" stroke-width="5"/>
-          <path d="M100 246 C105 170 156 135 230 140 C306 130 359 180 358 246 C355 310 306 343 230 343 C157 343 105 306 100 246Z" fill="#e8c96d"/>
-          <path d="M140 240 C120 200 160 165 210 180 C250 145 320 184 319 231 C345 270 300 315 257 294 C213 330 153 295 140 240Z" fill="#bd654d"/>
-          <path d="M170 220 C183 198 210 203 223 221 C240 198 270 207 278 230 C288 257 256 277 230 266 C202 281 164 255 170 220Z" fill="#ef7359"/>
-          <path d="M200 194 C184 164 204 145 228 159 C252 139 278 163 260 194" fill="none" stroke="#302c29" stroke-width="5" stroke-linecap="round"/>
-          <path d="M230 157 C219 130 237 110 254 104" fill="none" stroke="#667c60" stroke-width="6" stroke-linecap="round"/>
-          <path d="M248 124 C270 95 298 110 291 133 C276 148 260 143 248 124Z" fill="#667c60" stroke="#302c29" stroke-width="3"/>
-          <path d="M215 135 C191 112 170 123 181 145 C196 157 207 150 215 135Z" fill="#667c60" stroke="#302c29" stroke-width="3"/>
-          <g fill="#302c29">
-            <circle cx="188" cy="231" r="5"/>
-            <circle cx="270" cy="231" r="5"/>
-          </g>
-          <path d="M210 254 Q230 270 250 254" fill="none" stroke="#302c29" stroke-width="4" stroke-linecap="round"/>
-          <g fill="#ef7359" stroke="#302c29" stroke-width="3">
-            <path d="M80 130 C47 107 54 68 87 66 C115 65 127 100 80 130Z"/>
-            <path d="M355 115 C340 79 363 52 388 69 C410 88 388 115 355 115Z"/>
-            <path d="M365 345 C333 327 337 293 364 287 C394 284 402 324 365 345Z"/>
-          </g>
-          <g fill="none" stroke="#302c29" stroke-width="4" stroke-linecap="round">
-            <path d="M70 65 Q90 35 110 52"/>
-            <path d="M380 65 Q398 39 417 50"/>
-            <path d="M355 287 Q349 264 330 260"/>
-            <path d="M95 300 Q62 285 53 260"/>
-          </g>
-          <path d="M65 180 l-15 -13 m15 13 l18 -13 M390 205 l15 -14 m-15 14 l-18 -14" stroke="#302c29" stroke-width="4" stroke-linecap="round"/>
-          <path d="M140 55 l5 -15 m-5 15 l-15 -5 M300 55 l5 -15 m-5 15 l-15 -5" stroke="#bd654d" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-        <div class="art-note">Come hungry.</div>
-      </div>
-    </section>
-
-    <section class="intro">
-      <h2>It's a family affair. <span>With a little competition.</span></h2>
-      <p>
-        We're bringing everyone together for a few days of good food,
-        questionable decisions, and the annual debate over who makes
-        the best side dish. Your participation is strongly encouraged.
-      </p>
-    </section>
-
-    <section class="details">
-      <div class="details-grid">
-        <div class="detail">
-          <div class="detail-label">The dates</div>
-          <div class="detail-value">November 24–28<br>2026</div>
-        </div>
-        <div class="detail">
-          <div class="detail-label">The occasion</div>
-          <div class="detail-value">Thanksgiving<br>together</div>
-        </div>
-        <div class="detail">
-          <div class="detail-label">The dress code</div>
-          <div class="detail-value">Come as you are.<br>Bring an appetite.</div>
+  <section id="quiz" class="quiz" aria-label="Personality quiz">
+    <div class="quiz-inner">
+      <div id="quizPlay">
+        <div class="steps" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <p class="label" id="qnum">Question 1 of 5</p>
+        <h2 class="h-m qtitle" id="qtitle"></h2>
+        <div class="choices" id="choices" role="group" aria-labelledby="qtitle"></div>
+        <div class="qactions">
+          <p class="qmsg hidden" id="qmsg" role="alert">Pick one. The quiz will not improvise on your behalf.</p>
+          <div style="display:flex;gap:18px;align-items:center;margin-left:auto">
+            <button type="button" class="textlink" id="backQ">Back</button>
+            <button type="button" class="cta" id="nextQ">Next</button>
+          </div>
         </div>
       </div>
-    </section>
 
-    <section class="next">
-      <div class="eyebrow">Coming to the table</div>
-      <h2>First, find out what kind of guest you are.</h2>
-      <p>
-        Take the quiz. Claim your identity. Then stake your claim
-        in the Great Thanksgiving Draft. There is a lot to discuss.
-      </p>
-    </section>
-  </main>
+      <div id="quizResult" class="result hidden">
+        <p class="label">Your official feast personality</p>
+        <h2 class="h-l" id="rTitle"></h2>
+        <p class="lede" id="rCopy"></p>
+        <div class="assign">
+          <p class="label">Your assignment</p>
+          <p class="h-m" id="rDish"></p>
+          <p id="rDetail"></p>
+        </div>
+        <div class="cta-row" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+          <a href="#feast" class="cta coral" id="toFeast" style="text-decoration:none;display:inline-flex;align-items:center;min-height:54px">Pick your dish</a>
+          <button type="button" class="textlink" id="retake">Retake the quiz</button>
+        </div>
+        <p class="hint" style="font-size:13px;margin:0;opacity:.8">Your personality is for fun. The dish draft is where the real family politics begin.</p>
+      </div>
+    </div>
+  </section>
 
-  <footer class="footer">
-    <span>The Great Rice Thanksgiving · 2026</span>
-    <span>Made with love. And probably too much butter.</span>
+  <!-- The feast -->
+  <section id="feast" class="feast" aria-labelledby="feastTitle">
+    <div class="feast-head">
+      <p class="label">The feast · Live</p>
+      <h2 class="h-l" id="feastTitle">Build the feast. Or leave it to Mom.</h2>
+      <p class="lede">Claim an open dish or add one nobody asked for. Open dishes still need a cook. Covered dishes are someone else's problem, which is the best feeling in the world.</p>
+    </div>
+
+    <div class="feast-grid">
+      <form class="form" id="addForm" novalidate>
+        <div class="field">
+          <span class="label" id="catLabel">Category</span>
+          <div class="chips" id="catGrid" role="group" aria-labelledby="catLabel"></div>
+        </div>
+        <div class="field">
+          <label for="dishName">What are you bringing?</label>
+          <input id="dishName" type="text" maxlength="60" placeholder="Name it. Be brave." autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="dishCook">Who's making it?</label>
+          <input id="dishCook" type="text" maxlength="30" placeholder="Your name, or leave blank if it's still open" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="dishNotes">A note for the host (optional)</label>
+          <textarea id="dishNotes" maxlength="300" placeholder="Ingredients, serving notes, what it pairs with, what it doesn't pair with."></textarea>
+        </div>
+        <div class="field">
+          <label for="editCode">Edit code</label>
+          <input id="editCode" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="4 digits">
+          <p class="hint">You'll need this to change or remove the dish later. Write it down. We will not remember it for you.</p>
+        </div>
+        <p class="notice hidden" id="formNote" role="status"></p>
+        <div>
+          <button type="submit" class="cta">Add to the feast</button>
+        </div>
+      </form>
+
+      <div>
+        <div class="list-head">
+          <div class="filters" role="group" aria-label="Filter dishes">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="open" aria-pressed="false">Open</button>
+            <button type="button" data-filter="claimed" aria-pressed="false">Covered</button>
+          </div>
+        </div>
+        <p class="count" id="count"></p>
+        <p class="notice hidden" id="listNote" role="status"></p>
+        <div class="list" id="list" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="house">
+      <p class="label">House rule</p>
+      <h3 class="h-m">Come hungry. Bring enough to share.</h3>
+      <p>This is not the time for a tasting menu portion. Nobody wants your three precious spoonfuls of foam.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <nav aria-label="Footer">
+      <a href="#game">The game</a>
+      <a href="#feast">The feast</a>
+      <a href="#feast" id="codeHelp">Lost your edit code?</a>
+      <a href="#feast">Contact the host</a>
+    </nav>
+    <p>© The Great Rice Thanksgiving 2026. Nobody is responsible for the gravy.</p>
   </footer>
+
+</div>
+
+<script>
+/* ---------- Setup ---------- */
+const CONFIG = {
+  url: 'https://wrmihkanmxpupgfavpiz.supabase.co',
+  key: 'sb_publishable_3-jyLDeBSe1wOTH3Sqgk5w_xAsYXluv'
+};
+
+// The ids must match the values your table's category rule accepts: Mains, Sides, Desserts.
+const CATS = [
+  {id:'Mains',    name:'Mains',    hint:'The main event'},
+  {id:'Sides',    name:'Sides',    hint:'Something fresh, comfort food, the extras'},
+  {id:'Desserts', name:'Desserts', hint:'Sweet finish'}
+];
+const QUESTIONS = [
+  {q:"You arrive at the gathering. What's your first move?",a:["Find the kitchen. Assess the situation.","Locate everyone. Start making the rounds.","Find a comfortable seat. Let the day unfold."]},
+  {q:"Your ideal contribution has to…",a:["Steal the show. No notes.","Make the whole meal work better.","Be a little unexpected. That's the point."]},
+  {q:"The group chat is getting chaotic. You…",a:["Take charge. Someone has to.","Send a meme and raise the energy.","Quietly solve the problem."]},
+  {q:"At the table, you're most likely to…",a:["Tell a story that gets everyone going.","Make sure everyone has what they need.","Introduce a controversial food opinion."]},
+  {q:"Pick your Thanksgiving superpower.",a:["Make an entrance and make it memorable.","Turn random ingredients into a masterpiece.","Keep the whole operation running."]}
+];
+const RESULTS = [
+  {name:"The Entertainer",copy:"You bring the energy, the stories and, ideally, the dish everyone talks about on the ride home. Subtlety is not on the menu.",dish:"A show-stopping side or dessert",detail:"Big flavor, big personality. Bring the dish that gets passed around twice."},
+  {name:"The Feast Architect",copy:"You see the whole table. You know what is missing before anyone else does. Quietly essential, suspiciously organized.",dish:"A thoughtful main or essential side",detail:"Make the meal make sense. Balance, timing and excellent execution are your love language."},
+  {name:"The Wild Card",copy:"Predictable? Couldn't be you. You bring a little surprise, a new idea and just enough chaos to keep things interesting.",dish:"An unexpected favorite",detail:"A fresh twist, a family recipe or something nobody knew they needed."}
+];
+
+/* ---------- State ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const catName = id => (CATS.find(c => c.id === id) || {}).name || '';
+let sb = null, dishes = [], filter = 'all', pickedCat = '';
+let current = 0, answers = [];
+let editing = null, claiming = null;
+
+const configured = () => !CONFIG.url.includes('PASTE') && !CONFIG.key.includes('PASTE');
+if (configured()) sb = true;
+
+// Shows a message next to the form (where = 'form') or above the list (default).
+function note(msg, where = 'list'){
+  const n = $(where === 'form' ? '#formNote' : '#listNote');
+  n.textContent = msg;
+  n.classList.toggle('hidden', !msg);
+}
+
+/* ---------- Quiz (the result is random, for fun) ---------- */
+function renderQ(){
+  const q = QUESTIONS[current];
+  document.querySelectorAll('.steps span').forEach((s,i) => s.classList.toggle('on', i <= current));
+  $('#qnum').textContent = `Question ${current+1} of 5`;
+  $('#qtitle').textContent = q.q;
+  $('#choices').innerHTML = q.a.map((v,i) =>
+    `<button type="button" class="choice" data-choice="${i}" aria-pressed="${answers[current]===i}"><span class="n">${i+1}</span><span>${esc(v)}</span></button>`).join('');
+  $('#nextQ').textContent = current === 4 ? 'See my result' : 'Next';
+  $('#backQ').textContent = current === 0 ? 'Cancel' : 'Back';
+  $('#qmsg').classList.add('hidden');
+}
+function startQuiz(){
+  current = 0; answers = [];
+  $('#quizPlay').classList.remove('hidden');
+  $('#quizResult').classList.add('hidden');
+  renderQ();
+  $('#quiz').scrollIntoView({behavior:'smooth', block:'start'});
+}
+$('#startQuiz').addEventListener('click', startQuiz);
+$('#retake').addEventListener('click', startQuiz);
+$('#choices').addEventListener('click', e => {
+  const b = e.target.closest('[data-choice]');
+  if (!b) return;
+  answers[current] = Number(b.dataset.choice);
+  renderQ();
+});
+$('#nextQ').addEventListener('click', () => {
+  if (answers[current] === undefined){ $('#qmsg').classList.remove('hidden'); return; }
+  if (current < 4){ current++; renderQ(); return; }
+  const r = RESULTS[Math.floor(Math.random() * RESULTS.length)];
+  $('#rTitle').textContent = r.name;
+  $('#rCopy').textContent = r.copy;
+  $('#rDish').textContent = r.dish;
+  $('#rDetail').textContent = r.detail;
+  $('#quizPlay').classList.add('hidden');
+  $('#quizResult').classList.remove('hidden');
+});
+$('#backQ').addEventListener('click', () => {
+  if (current > 0){ current--; renderQ(); }
+  else { $('#quiz').scrollIntoView({behavior:'smooth'}); }
+});
+$('#codeHelp').addEventListener('click', e => {
+  e.preventDefault();
+  $('#editCode').focus();
+  $('#feast').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- Supabase ---------- */
+// Talks to Supabase's REST API directly. No client library, so there is nothing to load or break.
+async function api(path, opts = {}){
+  const headers = {apikey: CONFIG.key, 'Content-Type': 'application/json'};
+  if (opts.prefer) headers.Prefer = opts.prefer;
+  const res = await fetch(CONFIG.url + '/rest/v1/' + path, {method: opts.method || 'GET', headers, body: opts.body});
+  const text = await res.text();
+  const body = text ? JSON.parse(text) : null;
+  if (!res.ok) throw new Error((body && (body.message || body.hint)) || ('HTTP ' + res.status));
+  return body;
+}
+
+// Your table uses name and claimed_by. The page uses dish and cook. These translate between them.
+function fromRow(r){
+  return {id:r.id, created_at:r.created_at, category:r.category, dish:r.name,
+          status:r.status || (r.claimed_by ? 'claimed' : 'open'), cook:r.claimed_by, notes:r.notes, edit_code:r.edit_code};
+}
+function toRow(p){
+  const o = {...p};
+  if ('dish' in o){ o.name = o.dish; delete o.dish; }
+  if ('cook' in o){ o.claimed_by = o.cook; delete o.cook; }
+  return o;
+}
+
+async function loadDishes(){
+  if (!sb){
+    note('The shared list is not connected yet.');
+    renderList(); return;
+  }
+  try {
+    const data = await api('dishes?select=id,created_at,category,name,claimed_by,status,notes,edit_code&order=created_at.asc');
+    note('');
+    dishes = (data || []).map(fromRow);
+    if (!editing && !claiming) renderList();
+  } catch (err){
+    console.error('Load failed', err);
+    note('Could not load the feast: ' + err.message + ' (Check that the dishes table exists in Supabase.)');
+  }
+}
+async function saveChange(id, patch){
+  if (!sb) return;
+  try {
+    await api('dishes?id=eq.' + encodeURIComponent(id), {method:'PATCH', body: JSON.stringify(toRow(patch)), prefer:'return=minimal'});
+  } catch (err){
+    note('That change did not save: ' + err.message);
+    return;
+  }
+  loadDishes();
+}
+
+/* ---------- Add a dish ---------- */
+function renderCats(){
+  $('#catGrid').innerHTML = CATS.map(c =>
+    `<button type="button" class="chip" data-cat="${c.id}" aria-pressed="${pickedCat===c.id}" title="${esc(c.hint)}">${esc(c.name)}</button>`).join('');
+}
+$('#catGrid').addEventListener('click', e => {
+  const b = e.target.closest('[data-cat]');
+  if (!b) return;
+  pickedCat = b.dataset.cat;
+  renderCats();
+});
+$('#editCode').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,4); });
+
+$('#addForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const dish = $('#dishName').value.trim();
+  const cook = $('#dishCook').value.trim();
+  const notes = $('#dishNotes').value.trim();
+  const code = $('#editCode').value.trim();
+  if (!pickedCat) return note('Pick a category first. Even the extras need a home.', 'form');
+  if (!dish) return note('Name the dish. "Something" is not a name.', 'form');
+  if (!/^\d{4}$/.test(code)) return note('Set a 4-digit edit code, so you can fix your mistakes later.', 'form');
+  if (!sb) return note('The shared list is not connected, so nothing was saved.', 'form');
+
+  try {
+    await api('dishes', {method:'POST', prefer:'return=minimal', body: JSON.stringify(toRow({
+      category: pickedCat, dish, cook: cook || null,
+      status: cook ? 'claimed' : 'open', notes: notes || null, edit_code: code
+    }))});
+  } catch (err){
+    console.error('Insert failed', err);
+    return note('Could not add that dish: ' + err.message + ' (Check that the dishes table exists in Supabase.)', 'form');
+  }
+
+  e.target.reset();
+  pickedCat = ''; renderCats();
+  note('', 'form');
+  note('Added. It’s on the list below, unless the list is lying.');
+  loadDishes();
+});
+
+/* ---------- List ---------- */
+document.querySelector('.filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-filter]');
+  if (!b) return;
+  filter = b.dataset.filter;
+  document.querySelectorAll('.filters button').forEach(t => t.setAttribute('aria-pressed', t === b));
+  renderList();
+});
+
+function bodyFor(d){
+  if (editing && editing.id === d.id){
+    if (editing.mode === 'remove'){
+      return `<div class="inline">
+        <label for="code-${d.id}">Enter the edit code to remove this</label>
+        <div class="row"><input id="code-${d.id}" data-code type="text" inputmode="numeric" maxlength="4" placeholder="4 digits">
+        <button type="button" class="bad" data-act="confirmRemove" data-id="${d.id}">Remove it</button>
+        <button type="button" data-act="cancelEdit">Keep it</button></div></div>`;
+    }
+    return `<div class="inline">
+      <label for="code-${d.id}">Edit code</label>
+      <input id="code-${d.id}" data-code type="text" inputmode="numeric" maxlength="4" placeholder="4 digits">
+      <label for="ed-dish-${d.id}">Dish</label>
+      <input id="ed-dish-${d.id}" data-edit-dish type="text" maxlength="60" value="${esc(d.dish)}">
+      <label for="ed-cook-${d.id}">Who's making it (blank = still open)</label>
+      <input id="ed-cook-${d.id}" data-edit-cook type="text" maxlength="30" value="${esc(d.cook || '')}">
+      <label for="ed-notes-${d.id}">Note</label>
+      <textarea id="ed-notes-${d.id}" data-edit-notes maxlength="300">${esc(d.notes || '')}</textarea>
+      <div class="row"><button type="button" class="lead" data-act="saveEdit" data-id="${d.id}">Save changes</button>
+      <button type="button" data-act="cancelEdit">Cancel</button></div></div>`;
+  }
+  if (claiming === d.id){
+    return `<div class="inline">
+      <label for="claim-${d.id}">Your name</label>
+      <div class="row"><input id="claim-${d.id}" data-claim-input type="text" maxlength="30" placeholder="Who's on it?" autocomplete="name">
+      <button type="button" class="lead" data-act="claimSave" data-id="${d.id}">Count me in</button>
+      <button type="button" data-act="cancelEdit">Cancel</button></div></div>`;
+  }
+  const open = d.status === 'open';
+  const lead = open
+    ? `<button type="button" class="lead" data-act="claim" data-id="${d.id}">I'll bring it</button>`
+    : `<button type="button" data-act="release" data-id="${d.id}">Give it up</button>`;
+  return `<div class="actions">${lead}
+    <button type="button" data-act="edit" data-id="${d.id}">Edit</button>
+    <button type="button" class="bad" data-act="remove" data-id="${d.id}">Remove</button></div>`;
+}
+function cardHTML(d){
+  const open = d.status === 'open';
+  return `<article class="dish ${open ? 'open' : ''}" data-dish="${d.id}">
+    <span class="cat">${esc(catName(d.category))}</span>
+    <h3>${esc(d.dish)}</h3>
+    <span class="status"><i class="mark ${open ? 'open' : 'claimed'}" aria-hidden="true"></i>${open ? 'Open. Still needs a cook.' : 'Covered by ' + esc(d.cook)}</span>
+    ${d.notes ? `<p>${esc(d.notes)}</p>` : ''}
+    ${bodyFor(d)}
+  </article>`;
+}
+function renderList(){
+  const shown = dishes.filter(d => filter === 'all' || (filter === 'open' ? d.status === 'open' : d.status !== 'open'));
+  const openN = dishes.filter(d => d.status === 'open').length;
+  $('#count').textContent = `${dishes.length} dish${dishes.length===1?'':'es'}. ${openN} still open.`;
+  $('#list').innerHTML = shown.length
+    ? shown.map(cardHTML).join('')
+    : `<p class="empty">${dishes.length ? 'Nothing in this view. Suspiciously calm.' : 'Nothing here yet. The table is set and suspiciously empty.'}</p>`;
+}
+
+$('#list').addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const act = b.dataset.act, id = b.dataset.id;
+  const card = b.closest('[data-dish]');
+  const row = dishes.find(d => d.id === id);
+
+  if (act === 'claim'){ claiming = id; editing = null; renderList(); $('#claim-' + id)?.focus(); return; }
+  if (act === 'claimSave'){
+    const name = card.querySelector('[data-claim-input]').value.trim();
+    if (!name){ card.querySelector('[data-claim-input]').focus(); return; }
+    claiming = null;
+    await saveChange(id, {status:'claimed', cook:name});
+    return;
+  }
+  if (act === 'release'){ await saveChange(id, {status:'open', cook:null}); return; }
+  if (act === 'edit' || act === 'remove'){ editing = {id, mode:act}; claiming = null; renderList(); $('#code-' + id)?.focus(); return; }
+  if (act === 'cancelEdit'){ editing = null; claiming = null; renderList(); return; }
+
+  if (act === 'saveEdit' || act === 'confirmRemove'){
+    const code = card.querySelector('[data-code]').value.trim();
+    if (!row || code !== row.edit_code){
+      note('That edit code does not match. Check the code you wrote down.');
+      card.querySelector('[data-code]').focus();
+      return;
+    }
+    if (act === 'confirmRemove'){
+      editing = null;
+      try {
+        await api('dishes?id=eq.' + encodeURIComponent(id), {method:'DELETE', prefer:'return=minimal'});
+        loadDishes();
+      } catch (err){ note('Could not remove it: ' + err.message); }
+      return;
+    }
+    const dish = card.querySelector('[data-edit-dish]').value.trim();
+    const cook = card.querySelector('[data-edit-cook]').value.trim();
+    const notes = card.querySelector('[data-edit-notes]').value.trim();
+    if (!dish){ note('A dish needs a name.'); return; }
+    editing = null;
+    await saveChange(id, {dish, cook: cook || null, status: cook ? 'claimed' : 'open', notes: notes || null});
+  }
+});
+
+/* ---------- Start ---------- */
+renderCats();
+renderQ();
+renderList();
+if (sb){ loadDishes(); setInterval(loadDishes, 15000); }
+else note('The shared list is not connected yet.');
+</script>
 </body>
 </html>
