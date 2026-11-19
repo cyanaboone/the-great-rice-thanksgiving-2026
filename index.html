@@ -234,11 +234,6 @@ textarea{min-height:76px;resize:vertical}
           <label for="dishNotes">A note for the host (optional)</label>
           <textarea id="dishNotes" maxlength="300" placeholder="Ingredients, serving notes, what it pairs with, what it doesn't pair with."></textarea>
         </div>
-        <div class="field">
-          <label for="editCode">Edit code</label>
-          <input id="editCode" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="4 digits">
-          <p class="hint">You'll need this to change or remove the dish later. Write it down. We will not remember it for you.</p>
-        </div>
         <p class="notice hidden" id="formNote" role="status"></p>
         <div>
           <button type="submit" class="cta">Add to the feast</button>
@@ -270,7 +265,6 @@ textarea{min-height:76px;resize:vertical}
     <nav aria-label="Footer">
       <a href="#game">The game</a>
       <a href="#feast">The feast</a>
-      <a href="#feast" id="codeHelp">Lost your edit code?</a>
       <a href="#feast">Contact the host</a>
     </nav>
     <p>© The Great Rice Thanksgiving 2026. Nobody is responsible for the gravy.</p>
@@ -364,11 +358,6 @@ $('#backQ').addEventListener('click', () => {
   if (current > 0){ current--; renderQ(); }
   else { $('#quiz').scrollIntoView({behavior:'smooth'}); }
 });
-$('#codeHelp').addEventListener('click', e => {
-  e.preventDefault();
-  $('#editCode').focus();
-  $('#feast').scrollIntoView({behavior:'smooth'});
-});
 
 /* ---------- Supabase ---------- */
 // Talks to Supabase's REST API directly. No client library, so there is nothing to load or break.
@@ -431,23 +420,20 @@ $('#catGrid').addEventListener('click', e => {
   pickedCat = b.dataset.cat;
   renderCats();
 });
-$('#editCode').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,4); });
 
 $('#addForm').addEventListener('submit', async e => {
   e.preventDefault();
   const dish = $('#dishName').value.trim();
   const cook = $('#dishCook').value.trim();
   const notes = $('#dishNotes').value.trim();
-  const code = $('#editCode').value.trim();
   if (!pickedCat) return note('Pick a category first. Even the extras need a home.', 'form');
   if (!dish) return note('Name the dish. "Something" is not a name.', 'form');
-  if (!/^\d{4}$/.test(code)) return note('Set a 4-digit edit code, so you can fix your mistakes later.', 'form');
   if (!sb) return note('The shared list is not connected, so nothing was saved.', 'form');
 
   try {
     await api('dishes', {method:'POST', prefer:'return=minimal', body: JSON.stringify(toRow({
       category: pickedCat, dish, cook: cook || null,
-      status: cook ? 'claimed' : 'open', notes: notes || null, edit_code: code
+      status: cook ? 'claimed' : 'open', notes: notes || null
     }))});
   } catch (err){
     console.error('Insert failed', err);
@@ -474,14 +460,12 @@ function bodyFor(d){
   if (editing && editing.id === d.id){
     if (editing.mode === 'remove'){
       return `<div class="inline">
-        <label for="code-${d.id}">Enter the edit code to remove this</label>
-        <div class="row"><input id="code-${d.id}" data-code type="text" inputmode="numeric" maxlength="4" placeholder="4 digits">
+        <p>Remove this dish for everyone?</p>
+        <div class="row">
         <button type="button" class="bad" data-act="confirmRemove" data-id="${d.id}">Remove it</button>
         <button type="button" data-act="cancelEdit">Keep it</button></div></div>`;
     }
     return `<div class="inline">
-      <label for="code-${d.id}">Edit code</label>
-      <input id="code-${d.id}" data-code type="text" inputmode="numeric" maxlength="4" placeholder="4 digits">
       <label for="ed-dish-${d.id}">Dish</label>
       <input id="ed-dish-${d.id}" data-edit-dish type="text" maxlength="60" value="${esc(d.dish)}">
       <label for="ed-cook-${d.id}">Who's making it (blank = still open)</label>
@@ -541,16 +525,10 @@ $('#list').addEventListener('click', async e => {
     return;
   }
   if (act === 'release'){ await saveChange(id, {status:'open', cook:null}); return; }
-  if (act === 'edit' || act === 'remove'){ editing = {id, mode:act}; claiming = null; renderList(); $('#code-' + id)?.focus(); return; }
+  if (act === 'edit' || act === 'remove'){ editing = {id, mode:act}; claiming = null; renderList(); $('#ed-dish-' + id)?.focus(); return; }
   if (act === 'cancelEdit'){ editing = null; claiming = null; renderList(); return; }
 
   if (act === 'saveEdit' || act === 'confirmRemove'){
-    const code = card.querySelector('[data-code]').value.trim();
-    if (!row || code !== row.edit_code){
-      note('That edit code does not match. Check the code you wrote down.');
-      card.querySelector('[data-code]').focus();
-      return;
-    }
     if (act === 'confirmRemove'){
       editing = null;
       try {
