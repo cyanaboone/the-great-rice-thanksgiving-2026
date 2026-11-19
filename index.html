@@ -384,7 +384,7 @@ async function api(path, opts = {}){
 
 // Your table uses name and claimed_by. The page uses dish and cook. These translate between them.
 function fromRow(r){
-  return {id:r.id, created_at:r.created_at, category:r.category, dish:r.name,
+  return {id:String(r.id), created_at:r.created_at, category:r.category, dish:r.name,
           status:r.status || (r.claimed_by ? 'claimed' : 'open'), cook:r.claimed_by, notes:r.notes, edit_code:r.edit_code};
 }
 function toRow(p){
