@@ -124,11 +124,47 @@ textarea{min-height:76px;resize:vertical}
 .inline input{border-bottom-width:2px}
 .empty{padding:28px 0;font-size:18px;font-weight:500;border-top:2px solid var(--ink)}
 
-.house{margin-top:48px;display:grid;gap:10px;padding-top:20px;border-top:2px solid var(--ink)}
+.house{margin:56px calc(var(--gutter) * -1) 0;padding:36px var(--gutter);display:grid;gap:10px;background:#dba585;border:0}
 .house p{margin:0;max-width:52ch}
 
+/* Days and slots */
+.daystrip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:22px}
+.daystrip .day{border:2px solid var(--ink);background:transparent;padding:10px 2px;text-align:center;font-size:16px;font-weight:800;line-height:1.1}
+.daystrip .day small{display:block;font-size:11px;font-weight:600;margin-top:4px;opacity:.8}
+.daystrip .day[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.slot-block{display:grid;gap:14px;margin-bottom:36px}
+.slot-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:12px}
+.slot-head h3{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.slot-head p{margin:4px 0 0;font-size:14px}
+.slot-block.slot-feast .slot-head{border-top-width:4px}
+.react-row{display:flex;gap:6px;flex-wrap:wrap}
+.rx{border:2px solid var(--ink);background:transparent;padding:4px 9px;font-size:16px;line-height:1.2;display:inline-flex;align-items:center;gap:5px;min-height:34px}
+.rx span{font-size:13px;font-weight:700}
+.rx[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.slot-block .empty{border-top:0;padding:4px 0;font-size:16px}
+.rx:hover{background:var(--butter)}
+.rx[aria-pressed="true"]:hover{background:var(--ink)}
+
+/* Your plate */
+.your-plate{background:var(--white);border:2px solid var(--ink);padding:14px 16px;margin-bottom:22px;display:grid;gap:10px}
+.your-plate .label{margin:0}
+.your-plate .plate-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.your-plate .plate-list{list-style:none;margin:0;padding:0;display:grid}
+.your-plate .plate-item{width:100%;text-align:left;background:none;border:0;border-top:1.5px solid var(--ink);padding:9px 0;font-size:15px;display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;align-items:baseline}
+.your-plate .plate-item b{font-weight:800}
+.your-plate .plate-item span{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.your-plate .empty{border-top:0;padding:4px 0;font-size:15px}
+.plate-name{display:grid;gap:8px}
+.plate-name label{font-size:15px;font-weight:600}
+.plate-name .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.plate-name input{flex:1;min-width:160px;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:8px 0;font-size:17px}
+.plate-name .lead{background:var(--ink);color:var(--paper);border:0;padding:10px 14px;font-weight:700}
+
+.feast-stack{display:grid;gap:0}
+.feast-form{margin-top:44px;padding-top:26px;border-top:2px solid var(--ink)}
+
 /* Footer: plain links, like the Talea footer */
-.foot{margin-top:64px;border-top:2px solid var(--rule);padding:22px 0 36px;display:grid;gap:18px}
+.foot{margin-top:64px;border-top:0;padding:22px 0 36px;display:grid;gap:18px}
 .foot nav{display:flex;flex-wrap:wrap;gap:8px 22px}
 .foot nav a{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .foot p{margin:0;font-size:13px;opacity:.8}
@@ -200,18 +236,35 @@ textarea{min-height:76px;resize:vertical}
     <div class="feast-head">
       <p class="label">The feast · Live</p>
       <h2 class="h-l" id="feastTitle">Build the feast. Or leave it to Mom.</h2>
-      <p class="lede">Claim an open dish or add one nobody asked for. Open dishes still need a cook. Covered dishes are someone else's problem, which is the best feeling in the world.</p>
+      <p class="lede">Pick a day. Claim an open dish or add one nobody asked for. Open dishes still need a cook. Covered dishes are someone else's problem, which is the best feeling in the world.</p>
     </div>
 
-    <div class="feast-grid">
-      <form class="form" id="addForm" novalidate>
-        <div class="field">
-          <span class="label" id="catLabel">Category</span>
-          <div class="chips" id="catGrid" role="group" aria-labelledby="catLabel"></div>
+    <div class="feast-stack">
+      <div class="your-plate" id="plate" aria-live="polite"></div>
+      <div class="daystrip" id="dayStrip" role="tablist" aria-label="Pick a day"></div>
+      <div class="list-head">
+        <div class="filters" role="group" aria-label="Filter dishes">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="open" aria-pressed="false">Open</button>
+          <button type="button" data-filter="claimed" aria-pressed="false">Covered</button>
         </div>
+      </div>
+      <p class="count" id="count"></p>
+      <p class="notice hidden" id="listNote" role="status"></p>
+      <div id="list" aria-live="polite"></div>
+
+      <form class="form feast-form" id="addForm" novalidate>
         <div class="field">
           <label for="dishName">What are you bringing?</label>
           <input id="dishName" type="text" maxlength="60" placeholder="Name it. Be brave." autocomplete="off">
+        </div>
+        <div class="field">
+          <span class="label" id="slotLabel">Where does it go?</span>
+          <div class="chips" id="slotGrid" role="group" aria-labelledby="slotLabel"></div>
+        </div>
+        <div class="field hidden" id="catField">
+          <span class="label" id="catLabel">Category</span>
+          <div class="chips" id="catGrid" role="group" aria-labelledby="catLabel"></div>
         </div>
         <div class="field">
           <label for="dishCook">Who's making it?</label>
@@ -226,19 +279,6 @@ textarea{min-height:76px;resize:vertical}
           <button type="submit" class="cta">Add to the feast</button>
         </div>
       </form>
-
-      <div>
-        <div class="list-head">
-          <div class="filters" role="group" aria-label="Filter dishes">
-            <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="open" aria-pressed="false">Open</button>
-            <button type="button" data-filter="claimed" aria-pressed="false">Covered</button>
-          </div>
-        </div>
-        <p class="count" id="count"></p>
-        <p class="notice hidden" id="listNote" role="status"></p>
-        <div class="list" id="list" aria-live="polite"></div>
-      </div>
     </div>
 
     <div class="house">
@@ -290,8 +330,25 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const catName = id => (CATS.find(c => c.id === id) || {}).name || '';
 let sb = null, dishes = [], filter = 'all', pickedCat = '';
+let day = 'Thu', addTarget = {day:'Thu', meal:'Feast'}, reactions = [], myReacts = {};
 let current = 0, answers = [];
 let editing = null, claiming = null;
+// Days and the meals that go in them. The Thanksgiving Feast is the one slot that covers lunch and dinner.
+const DAYS = [{id:'Tue',name:'Tuesday'},{id:'Wed',name:'Wednesday'},{id:'Thu',name:'Thursday'},{id:'Fri',name:'Friday'},{id:'Sat',name:'Saturday'}];
+const SLOTS = [
+  {day:'Tue', meal:'Dinner'},
+  {day:'Wed', meal:'Breakfast'}, {day:'Wed', meal:'Lunch'}, {day:'Wed', meal:'Dinner'},
+  {day:'Thu', meal:'Breakfast'},
+  {day:'Thu', meal:'Feast', title:'The Feast', sub:'Thanksgiving lunch and dinner, one sign-up.'},
+  {day:'Fri', meal:'Breakfast'}, {day:'Fri', meal:'Lunch'}, {day:'Fri', meal:'Dinner'},
+  {day:'Sat', meal:'Breakfast'}
+];
+const slotTitle = sl => sl.title || (DAYS.find(x => x.id === sl.day).name + ' ' + sl.meal.toLowerCase());
+const REACTIONS = [
+  {key:'heart', icon:'❤️', label:'I want this'},
+  {key:'think', icon:'🤔', label:'What is this?'},
+  {key:'laugh', icon:'😂', label:'That is a choice'}
+];
 
 const configured = () => !CONFIG.url.includes('PASTE') && !CONFIG.key.includes('PASTE');
 if (configured()) sb = true;
@@ -361,6 +418,7 @@ async function api(path, opts = {}){
 // Your table uses name and claimed_by. The page uses dish and cook. These translate between them.
 function fromRow(r){
   return {id:String(r.id), created_at:r.created_at, category:r.category, dish:r.name, sort_order:r.sort_order,
+          day:r.day || 'Thu', meal:r.meal || 'Feast',
           status:r.status || (r.claimed_by ? 'claimed' : 'open'), cook:r.claimed_by, notes:r.notes, edit_code:r.edit_code};
 }
 function toRow(p){
@@ -373,13 +431,14 @@ function toRow(p){
 async function loadDishes(){
   if (!sb){
     note('The shared list is not connected yet.');
-    renderList(); return;
+    renderAll(); return;
   }
   try {
-    const data = await api('dishes?select=id,created_at,category,name,claimed_by,status,notes,sort_order&order=sort_order.asc');
+    const data = await api('dishes?select=id,created_at,category,name,claimed_by,status,notes,sort_order,day,meal&order=sort_order.asc');
     note('');
     dishes = (data || []).map(fromRow);
-    if (!editing && !claiming) renderList();
+    await loadReactions();
+    if (!editing && !claiming) renderAll();
   } catch (err){
     console.error('Load failed', err);
     note('Could not load the feast: ' + err.message + ' (Check that the dishes table exists in Supabase.)');
@@ -396,10 +455,57 @@ async function saveChange(id, patch){
   loadDishes();
 }
 
+/* ---------- Reactions ---------- */
+// Counts are shared. Each browser remembers its own pick, so one emoji per dish per device.
+async function loadReactions(){
+  try { reactions = (await api('dish_reactions?select=id,dish_id,emoji')) || []; }
+  catch (err){ console.warn('Reactions not loaded', err); reactions = []; }
+}
+function loadMine(){
+  try { return JSON.parse(localStorage.getItem('riceReactions') || '{}'); } catch (e){ return {}; }
+}
+function saveMine(){
+  try { localStorage.setItem('riceReactions', JSON.stringify(myReacts)); } catch (e){}
+}
+function countFor(dishId, key){
+  return reactions.filter(r => String(r.dish_id) === String(dishId) && r.emoji === key).length;
+}
+async function react(dishId, key){
+  if (!sb) return;
+  const mine = myReacts[dishId];
+  try {
+    if (mine){
+      await api('dish_reactions?id=eq.' + encodeURIComponent(mine.rowId), {method:'DELETE', prefer:'return=minimal'});
+      delete myReacts[dishId];
+    }
+    if (!mine || mine.key !== key){
+      const rows = await api('dish_reactions', {method:'POST', prefer:'return=representation',
+        body: JSON.stringify({dish_id: Number(dishId), emoji: key})});
+      myReacts[dishId] = {key, rowId: rows[0].id};
+    }
+    saveMine();
+  } catch (err){
+    note('That reaction did not save: ' + err.message);
+  }
+  await loadReactions();
+  renderList();
+}
+
 /* ---------- Add a dish ---------- */
 function renderCats(){
   $('#catGrid').innerHTML = CATS.map(c =>
     `<button type="button" class="chip" data-cat="${c.id}" aria-pressed="${pickedCat===c.id}" title="${esc(c.hint)}">${esc(c.name)}</button>`).join('');
+}
+function renderSlotChips(){
+  $('#slotLabel').textContent = day === 'Thu' ? 'Where does it go?' : 'When?';
+  $('#catField').classList.toggle('hidden', addTarget.meal !== 'Feast');
+  $('#slotGrid').innerHTML = SLOTS.filter(sl => sl.day === day).map(sl =>
+    `<button type="button" class="chip" data-slot="${sl.day}|${sl.meal}" aria-pressed="${addTarget.day===sl.day && addTarget.meal===sl.meal}">${esc(slotTitle(sl))}</button>`).join('');
+}
+function setTarget(d, m){
+  addTarget = {day:d, meal:m};
+  day = d;
+  renderAll();
 }
 $('#catGrid').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]');
@@ -407,20 +513,28 @@ $('#catGrid').addEventListener('click', e => {
   pickedCat = b.dataset.cat;
   renderCats();
 });
+$('#slotGrid').addEventListener('click', e => {
+  const b = e.target.closest('[data-slot]');
+  if (!b) return;
+  const [d, m] = b.dataset.slot.split('|');
+  setTarget(d, m);
+});
 
 $('#addForm').addEventListener('submit', async e => {
   e.preventDefault();
   const dish = $('#dishName').value.trim();
   const cook = $('#dishCook').value.trim();
   const notes = $('#dishNotes').value.trim();
-  if (!pickedCat) return note('Pick a category first. Even the extras need a home.', 'form');
+  const isFeast = addTarget.meal === 'Feast';
+  if (isFeast && !pickedCat) return note('Pick a category first. Even the extras need a home.', 'form');
   if (!dish) return note('Name the dish. "Something" is not a name.', 'form');
   if (!sb) return note('The shared list is not connected, so nothing was saved.', 'form');
 
   try {
     await api('dishes', {method:'POST', prefer:'return=minimal', body: JSON.stringify(toRow({
-      category: pickedCat, dish, cook: cook || null,
+      category: isFeast ? pickedCat : 'Sides', dish, cook: cook || null,
       status: cook ? 'claimed' : 'open', notes: notes || null,
+      day: addTarget.day, meal: addTarget.meal,
       sort_order: (dishes.length ? Math.min(...dishes.map(d => d.sort_order ?? 0)) : 1) - 1
     }))});
   } catch (err){
@@ -428,10 +542,11 @@ $('#addForm').addEventListener('submit', async e => {
     return note('Could not add that dish: ' + err.message + ' (Check that the dishes table exists in Supabase.)', 'form');
   }
 
+  if (cook) setMyName(cook);
   e.target.reset();
   pickedCat = ''; renderCats();
   note('', 'form');
-  note('Added. It’s on the list below, unless the list is lying.');
+  note('Added. It’s in the ' + slotTitle(addTarget) + ' slot below, unless the list is lying.');
   loadDishes();
 });
 
@@ -442,6 +557,13 @@ document.querySelector('.filters').addEventListener('click', e => {
   filter = b.dataset.filter;
   document.querySelectorAll('.filters button').forEach(t => t.setAttribute('aria-pressed', t === b));
   renderList();
+});
+$('#dayStrip').addEventListener('click', e => {
+  const b = e.target.closest('[data-day]');
+  if (!b) return;
+  day = b.dataset.day;
+  addTarget = SLOTS.find(sl => sl.day === day);
+  renderAll();
 });
 
 function bodyFor(d){
@@ -478,37 +600,82 @@ function bodyFor(d){
     <button type="button" data-act="edit" data-id="${d.id}">Edit</button>
     <button type="button" class="bad" data-act="remove" data-id="${d.id}">Remove</button></div>`;
 }
+function reactHTML(d){
+  const mine = myReacts[d.id];
+  return `<div class="react-row" role="group" aria-label="React to ${esc(d.dish)}">${REACTIONS.map(r => {
+    const pressed = !!(mine && mine.key === r.key);
+    return `<button type="button" class="rx" data-act="react" data-id="${d.id}" data-key="${r.key}" aria-pressed="${pressed}" title="${esc(r.label)}">${r.icon}<span>${countFor(d.id, r.key)}</span></button>`;
+  }).join('')}</div>`;
+}
 function cardHTML(d){
   const open = d.status === 'open';
   return `<article class="dish ${open ? 'open' : ''}" data-dish="${d.id}">
-    <span class="cat">${esc(catName(d.category))}</span>
+    ${d.meal === 'Feast' ? `<span class="cat">${esc(catName(d.category))}</span>` : ''}
     <h3>${esc(d.dish)}</h3>
     <span class="status"><i class="mark ${open ? 'open' : 'claimed'}" aria-hidden="true"></i>${open ? 'Open. Still needs a cook.' : 'Covered by ' + esc(d.cook)}</span>
     ${d.notes ? `<p>${esc(d.notes)}</p>` : ''}
+    ${reactHTML(d)}
     ${bodyFor(d)}
   </article>`;
 }
+function matchesFilter(d){
+  return filter === 'all' || (filter === 'open' ? d.status === 'open' : d.status !== 'open');
+}
+function renderDays(){
+  $('#dayStrip').innerHTML = DAYS.map(x => {
+    const openN = dishes.filter(d => d.day === x.id && d.status === 'open').length;
+    return `<button type="button" class="day" data-day="${x.id}" aria-pressed="${day===x.id}">${x.id}<small>${openN} open</small></button>`;
+  }).join('');
+}
 function renderList(){
-  const shown = dishes.filter(d => filter === 'all' || (filter === 'open' ? d.status === 'open' : d.status !== 'open'));
-  const openN = dishes.filter(d => d.status === 'open').length;
-  $('#count').textContent = `${dishes.length} dish${dishes.length===1?'':'es'}. ${openN} still open.`;
-  $('#list').innerHTML = shown.length
-    ? shown.map(cardHTML).join('')
-    : `<p class="empty">${dishes.length ? 'Nothing in this view. Suspiciously calm.' : 'Nothing here yet. The table is set and suspiciously empty.'}</p>`;
+  const dayName = DAYS.find(x => x.id === day).name;
+  const slots = SLOTS.filter(sl => sl.day === day);
+  let total = 0, openN = 0, html = '';
+  for (const sl of slots){
+    const all = dishes.filter(d => d.day === sl.day && d.meal === sl.meal);
+    const shown = all.filter(matchesFilter);
+    total += all.length;
+    openN += all.filter(d => d.status === 'open').length;
+    html += `<section class="slot-block ${sl.meal === 'Feast' ? 'slot-feast' : ''}" aria-label="${esc(slotTitle(sl))}">
+      <header class="slot-head">
+        <div><h3>${esc(slotTitle(sl))}</h3>${sl.sub ? `<p>${esc(sl.sub)}</p>` : ''}</div>
+        <button type="button" class="chip" data-add="${sl.day}|${sl.meal}">+ Add a dish</button>
+      </header>
+      <div class="list">${shown.length
+        ? shown.map(cardHTML).join('')
+        : `<p class="empty">${all.length ? 'Nothing matches this filter.' : 'Nothing here yet. Be the first brave soul.'}</p>`}</div>
+    </section>`;
+  }
+  $('#count').textContent = `${dayName}: ${total} dish${total===1?'':'es'}, ${openN} still open.`;
+  $('#list').innerHTML = html;
+}
+function renderAll(){
+  renderPlate();
+  renderDays();
+  renderSlotChips();
+  renderList();
 }
 
 $('#list').addEventListener('click', async e => {
+  const add = e.target.closest('[data-add]');
+  if (add){
+    const [d, m] = add.dataset.add.split('|');
+    setTarget(d, m);
+    $('#addForm').scrollIntoView({behavior:'smooth', block:'start'});
+    return;
+  }
   const b = e.target.closest('[data-act]');
   if (!b) return;
   const act = b.dataset.act, id = b.dataset.id;
   const card = b.closest('[data-dish]');
-  const row = dishes.find(d => d.id === id);
 
+  if (act === 'react'){ await react(id, b.dataset.key); return; }
   if (act === 'claim'){ claiming = id; editing = null; renderList(); $('#claim-' + id)?.focus(); return; }
   if (act === 'claimSave'){
     const name = card.querySelector('[data-claim-input]').value.trim();
     if (!name){ card.querySelector('[data-claim-input]').focus(); return; }
     claiming = null;
+    setMyName(name);
     await saveChange(id, {status:'claimed', cook:name});
     return;
   }
@@ -534,10 +701,63 @@ $('#list').addEventListener('click', async e => {
   }
 });
 
+/* ---------- Your plate ---------- */
+// Your name is remembered in this browser only. Dishes claimed under it collect on your plate.
+function myName(){ try { return localStorage.getItem('riceName') || ''; } catch (err){ return ''; } }
+function setMyName(n){ try { localStorage.setItem('riceName', n.trim()); } catch (err){} }
+function slotIndex(d, m){ return SLOTS.findIndex(sl => sl.day === d && sl.meal === m); }
+function renderPlate(){
+  const el = $('#plate');
+  const name = myName();
+  if (!name){
+    el.innerHTML = `<p class="label">Your plate</p>
+      <form class="plate-name" id="nameForm">
+        <label for="nameIn">Who are you? Dishes you claim will collect here.</label>
+        <div class="row"><input id="nameIn" type="text" maxlength="30" placeholder="Your name" autocomplete="name">
+        <button type="submit" class="lead">Save my name</button></div>
+      </form>`;
+    return;
+  }
+  const mine = dishes
+    .filter(d => d.cook && d.cook.trim().toLowerCase() === name.toLowerCase())
+    .sort((a, b) => (slotIndex(a.day, a.meal) - slotIndex(b.day, b.meal)) || ((a.sort_order ?? 0) - (b.sort_order ?? 0)));
+  const items = mine.map(d => {
+    const sl = SLOTS.find(x => x.day === d.day && x.meal === d.meal);
+    const where = sl ? slotTitle(sl) : d.day + ' ' + d.meal;
+    return `<li><button type="button" class="plate-item" data-jump="${esc(d.day)}|${esc(d.meal)}"><b>${esc(d.dish)}</b><span>${esc(where)}</span></button></li>`;
+  }).join('');
+  el.innerHTML = `<div class="plate-head">
+      <p class="label">${esc(name)}'s plate · ${mine.length} dish${mine.length === 1 ? '' : 'es'}</p>
+      <button type="button" class="textlink" id="changeName">Not you? Change name</button>
+    </div>
+    ${mine.length ? `<ul class="plate-list">${items}</ul>` : '<p class="empty">Nothing claimed yet. Pick a slot below and bring something.</p>'}`;
+}
+$('#plate').addEventListener('submit', e => {
+  if (e.target.id !== 'nameForm') return;
+  e.preventDefault();
+  const v = $('#nameIn').value.trim();
+  if (!v) return;
+  setMyName(v);
+  renderAll();
+});
+$('#plate').addEventListener('click', e => {
+  if (e.target.closest('#changeName')){
+    try { localStorage.removeItem('riceName'); } catch (err){}
+    renderAll();
+    return;
+  }
+  const j = e.target.closest('[data-jump]');
+  if (!j) return;
+  const [d, m] = j.dataset.jump.split('|');
+  setTarget(d, m);
+  $('#list').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
 /* ---------- Start ---------- */
+myReacts = loadMine();
 renderCats();
 renderQ();
-renderList();
+renderAll();
 if (sb){ loadDishes(); setInterval(loadDishes, 15000); }
 else note('The shared list is not connected yet.');
 </script>
